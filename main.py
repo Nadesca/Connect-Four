@@ -58,7 +58,7 @@ def check_for_winning_move(board, current_row, current_col, turn):
             if board[row][current_col] == (turn + 1):
                 counter += 1
                 if counter == 4:
-                    print("Player " + str(turn) + " hat gewonnen!!")
+                    print("Player " + str(turn + 1) + " hat gewonnen!!")
                     return True
             else:
                 counter = 0
@@ -69,13 +69,12 @@ def check_for_winning_move(board, current_row, current_col, turn):
         if board[current_row][col] == (turn + 1):
             counter += 1
             if counter == 4:
-                print("Player " + str(turn) + " hat gewonnen!!")
+                print("Player " + str(turn + 1) + " hat gewonnen!!")
                 return True
         else:
             counter = 0
 
-    # check_for_positively sloped_diagonal in relevant places:
-    if current_row < 3 and current_col < 4:
+    # check_for_positively sloped_diagonal:
         counter = 0
         for col in range(4):
             for row in range(3):
@@ -88,8 +87,7 @@ def check_for_winning_move(board, current_row, current_col, turn):
                 else:
                     counter = 0
 
-    # check_for_negatively sloped_diagonal in relevant places:
-    if current_row > 2 and current_col > 2:
+    # check_for_negatively sloped_diagonal:
         counter = 0
         for col in range(4):
             for row in range(3):
@@ -153,5 +151,12 @@ while not game_over:
                 continue
     turn += 1
     turn = turn % 2
+
+
+
+
+
+
+
 
 
