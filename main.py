@@ -1,3 +1,15 @@
+
+# -*- coding: utf8 -*-
+
+__author__ = 'Nadia Cullmann'
+
+# Dieses Programm simuliert ein Vier Gewinnt Spiel
+
+import locale
+
+locale.setlocale(locale.LC_ALL, 'de-DE')
+
+
 def create_board():
     board = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]]
     return board
@@ -91,33 +103,55 @@ def check_for_winning_move(board, current_row, current_col, turn):
                     counter = 0
 
 
+game_over = False
+turn = 0
+
+
 while not game_over:
     # Ask for Player 1 Input
     if turn == 0:
-        current_col = int(input("Player 1 bitte wähle eine Spalte(0-6)"))
-        if is_valid_location(board, current_col):
-            current_row = get_next_open_row(board, current_col)
-            drop_piece(board, current_row, current_col)
-            draw_board()
-        if check_for_winning_move(board, current_row, current_col, turn):
-            game_over = True
-        if check_game_over(board):
-            game_over = True
+        while True:
+            current_col = input("Player 1 bitte wähle eine Spalte(0-6)")
+            try:
+                current_col = int(current_col)
+                if current_col < 0 or current_col > 6:
+                    print("Keine gültige Spaltenzahl!")
+                    continue
+                if is_valid_location(board, current_col):
+                    current_row = get_next_open_row(board, current_col)
+                    drop_piece(board, current_row, current_col)
+                    draw_board()
+                if check_for_winning_move(board, current_row, current_col, turn):
+                    game_over = True
+                if check_game_over(board):
+                    game_over = True
+                break
+            except ValueError:
+                print("Keine gültige Spaltenzahl!")
+                continue
 
     # Ask for Player 2 Input
     if turn == 1:
-        current_col = int(input("Player 2 bitte wähle eine Spalte(0-6)"))
-        if is_valid_location(board, current_col):
-            current_row = get_next_open_row(board, current_col)
-            drop_piece(board, current_row, current_col)
-            draw_board()
-        if check_for_winning_move(board, current_row, current_col, turn):
-            game_over = True
-        if check_game_over(board):
-            game_over = True
+        while True:
+            current_col = input("Player 2 bitte wähle eine Spalte(0-6)")
+            try:
+                current_col = int(current_col)
+                if current_col < 0 or current_col > 6:
+                    print("Keine gültige Spaltenzahl!")
+                    continue
+                if is_valid_location(board, current_col):
+                    current_row = get_next_open_row(board, current_col)
+                    drop_piece(board, current_row, current_col)
+                    draw_board()
+                if check_for_winning_move(board, current_row, current_col, turn):
+                    game_over = True
+                if check_game_over(board):
+                    game_over = True
+                break
+            except ValueError:
+                print("Keine gültige Spaltenzahl!")
+                continue
     turn += 1
     turn = turn % 2
-
-
 
 
