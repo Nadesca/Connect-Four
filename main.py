@@ -17,6 +17,9 @@ def create_board():
 
 board = create_board()
 
+row_count = 6
+column_count = 7
+
 
 def draw_board():
     for row in reversed(board):
@@ -32,7 +35,7 @@ def is_valid_location(board, col):
 
 
 def get_next_open_row(board, col):
-    for row in range(len(board)):
+    for row in range(row_count):
         if board[row][col] == 0:
             return row
             break
@@ -43,7 +46,7 @@ def drop_piece(board, row, col):
 
 
 def check_game_over(board):
-    for col in range(len(board[0])):
+    for col in range(column_count):
         if board[5][col] == 0:
             return False
     print("Game Over!")
@@ -52,20 +55,19 @@ def check_game_over(board):
 
 def check_for_winning_move(board, current_row, current_col, turn):
     # check for vertical win:
-    if current_col > 2:
-        counter = 0
-        for row in range(len(board)):
-            if board[row][current_col] == (turn + 1):
-                counter += 1
-                if counter == 4:
-                    print("Player " + str(turn + 1) + " hat gewonnen!!")
-                    return True
-            else:
-                counter = 0
+    counter = 0
+    for row in range(row_count):
+        if board[row][current_col] == (turn + 1):
+            counter += 1
+            if counter == 4:
+                print("Player " + str(turn + 1) + " hat gewonnen!!")
+                return True
+        else:
+            counter = 0
 
     # check_for_horizontal win:
     counter = 0
-    for col in range(len(board[0])):
+    for col in range(column_count):
         if board[current_row][col] == (turn + 1):
             counter += 1
             if counter == 4:
@@ -101,15 +103,48 @@ def check_for_winning_move(board, current_row, current_col, turn):
                     counter = 0
 
 
+# check if player has a threat with current move:
+def has_threat(board, current_row, current_col, turn):
+    # check for vertical threat:
+        counter = 0
+        for row in range(row_count):
+            if board[row][current_col] == turn + 1:
+                counter += 1
+            elif board[row][current_col] == 0 and counter == 3:
+                print("Player " + str(turn + 1) + " hat vertikalen threat in spalte " + str(current_col) + "!!")
+                return True
+            else:
+                counter = 0
+    # check_for_horizontal threat:
+        counter = 0
+        for col in range(column_count):
+            if board[current_row][col] == turn + 1:
+                counter += 1
+            elif counter == 3 and board[current_row][col] == 0:
+                print("Player " + str(turn + 1) + " hat horizontalen threat in Spalte " + str(current_col) + "!!")
+                return True
+            else:
+                counter = 0
+        # loop backwards through same column
+        for col in range(column_count-1, -1, -1):
+            if board[current_row][col] == turn + 1:
+                counter += 1
+            elif counter == 3 and board[current_row][col] == 0:
+                print("Player " + str(turn + 1) + " hat horizontalen threat in Spalte " + str(current_col) + "!!")
+                return True
+            else:
+                counter = 0
+
+
 game_over = False
 turn = 0
-
 
 while not game_over:
     # Ask for Player 1 Input
     if turn == 0:
-        while True:
-            current_col = input("Player 1 bitte wähle eine Spalte(0-6)")
+        valid_entry_player_1 = False
+        while not valid_entry_player_1:
+            current_col = input("Player 1 bitte wähle eine Spalte(0-6)\n")
             try:
                 current_col = int(current_col)
                 if current_col < 0 or current_col > 6:
@@ -119,10 +154,13 @@ while not game_over:
                     current_row = get_next_open_row(board, current_col)
                     drop_piece(board, current_row, current_col)
                     draw_board()
+                    valid_entry_player_1 = True
                 if check_for_winning_move(board, current_row, current_col, turn):
                     game_over = True
                 if check_game_over(board):
                     game_over = True
+                if has_threat(board, current_row, current_col, turn):
+                    pass
                 break
             except ValueError:
                 print("Keine gültige Spaltenzahl!")
@@ -130,8 +168,9 @@ while not game_over:
 
     # Ask for Player 2 Input
     if turn == 1:
-        while True:
-            current_col = input("Player 2 bitte wähle eine Spalte(0-6)")
+        valid_entry_player_2 = False
+        while not valid_entry_player_2:
+            current_col = input("Player 2 bitte wähle eine Spalte(0-6)\n")
             try:
                 current_col = int(current_col)
                 if current_col < 0 or current_col > 6:
@@ -141,18 +180,19 @@ while not game_over:
                     current_row = get_next_open_row(board, current_col)
                     drop_piece(board, current_row, current_col)
                     draw_board()
+                    valid_entry_player_2 = True
                 if check_for_winning_move(board, current_row, current_col, turn):
                     game_over = True
                 if check_game_over(board):
                     game_over = True
+                if has_threat(board, current_row, current_col, turn):
+                    pass
                 break
             except ValueError:
                 print("Keine gültige Spaltenzahl!")
                 continue
     turn += 1
     turn = turn % 2
-
-
 
 
 
