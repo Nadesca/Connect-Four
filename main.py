@@ -77,28 +77,28 @@ def check_for_winning_move(board, current_row, current_col, turn):
             counter = 0
 
     # check_for_positively sloped_diagonal:
-        counter = 0
-        for col in range(4):
-            for row in range(3):
-                for index in range(0, 4):
-                    if board[row + index][col + index] == (turn + 1):
-                        counter += 1
-                        if counter == 4:
-                            print("Player " + str(turn + 1) + " hat gewonnen!!")
-                            return True
+    counter = 0
+    for col in range(4):
+        for row in range(3):
+            for index in range(0, 4):
+                if board[row + index][col + index] == (turn + 1):
+                    counter += 1
+                    if counter == 4:
+                        print("Player " + str(turn + 1) + " hat gewonnen!!")
+                        return True
                 else:
                     counter = 0
 
     # check_for_negatively sloped_diagonal:
-        counter = 0
-        for col in range(4):
-            for row in range(3):
-                for index in range(0, 4):
-                    if board[row - index][col + index] == (turn + 1):
-                        counter += 1
-                        if counter == 4:
-                            print("Player " + str(turn + 1) + " hat gewonnen!!")
-                            return True
+    counter = 0
+    for col in range(4):
+        for row in range(3):
+            for index in range(0, 4):
+                if board[row - index][col + index] == (turn + 1):
+                    counter += 1
+                    if counter == 4:
+                        print("Player " + str(turn + 1) + " hat gewonnen!!")
+                        return True
                 else:
                     counter = 0
 
@@ -117,30 +117,56 @@ def has_threat(board, current_row, current_col, turn):
             break
         else:
             counter = 0
-    # check_for_horizontal threat:
+    # check for horizontal threat:
     counter = 0
     for col in range(column_count):
         if board[current_row][col] == turn + 1:
             counter += 1
         elif counter == 3 and board[current_row][col] == 0:
-            print("Player " + str(turn + 1) + " hat horizontalen threat in Spalte " + str(current_col) + " von links nach rechts!!")
+            print("Player " + str(turn + 1) + " hat horizontalen threat in Position " + str(col) + "-" + str(current_row) + " !!")
             num_threats += 1
             break
         else:
             counter = 0
         # loop backwards through same column
+    counter = 0
     for col in range(column_count-1, -1, -1):
         if board[current_row][col] == turn + 1:
             counter += 1
         elif counter == 3 and board[current_row][col] == 0:
-            print("Player " + str(turn + 1) + " hat horizontalen threat in Spalte " + str(current_col) + " von rechts nach links!!")
+            print("Player " + str(turn + 1) + " hat horizontalen threat in Position " + str(col) + "-" + str(current_row) + " !!")
             num_threats += 1
             break
         else:
             counter = 0
+        # board[current_row].split((turn + 1) % 2)
+    # check for positively sloped diagonal threat:
+    counter = 0
+    for col in range(4):
+        for row in range(3):
+            for index in range(0, 4):
+                if board[row + index][col + index] == (turn + 1):
+                    counter += 1
+                if board[row + index][col + index] == 0 and counter == 3:
+                    print("Player " + str(turn + 1) + " hat positiven diagonalen threat in Position" + str(col + index) + "-" +  str(row + index) + "!!")
+                    num_threats += 1
+            else:
+                counter = 0
+        # loop backwards through same diagonal
+    counter = 0
+    for col in range(4):
+        for row in range(3):
+            for index in range(3, -1, -1):
+                if board[row + index][col + index] == (turn + 1):
+                    counter += 1
+                if board[row + index][col + index] == 0 and counter == 3:
+                    print("Player " + str(turn + 1) + " hat positiven diagonalen threat in Position " + str(col + index) + "-" + str(row + index) + "!!")
+                    num_threats += 1
+            else:
+                counter = 0
     if num_threats > 0:
         return num_threats
-        # board[current_row].split((turn + 1) % 2)
+    # check for negatively sloped diagonal threat:
 
 
 game_over = False
@@ -167,7 +193,7 @@ while not game_over:
                 if check_game_over(board):
                     game_over = True
                 num_threats = has_threat(board, current_row, current_col, turn)
-                print("Anzahl threats: " + str(num_threats))
+                print("Anzahl neue threats: " + str(num_threats))
 
                 break
             except ValueError:
@@ -193,8 +219,9 @@ while not game_over:
                     game_over = True
                 if check_game_over(board):
                     game_over = True
-                num_threats = has_threat(board, current_row, current_col, turn)
-                print("Anzahl threats: " + str(num_threats))
+                if not game_over:
+                    num_threats = has_threat(board, current_row, current_col, turn)
+                    print("Anzahl threats: " + str(num_threats))
                 break
             except ValueError:
                 print("Keine gültige Spaltenzahl!")
