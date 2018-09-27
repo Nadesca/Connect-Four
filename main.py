@@ -105,35 +105,42 @@ def check_for_winning_move(board, current_row, current_col, turn):
 
 # check if player has a threat with current move:
 def has_threat(board, current_row, current_col, turn):
+    num_threats = 0
     # check for vertical threat:
-        counter = 0
-        for row in range(row_count):
-            if board[row][current_col] == turn + 1:
-                counter += 1
-            elif board[row][current_col] == 0 and counter == 3:
-                print("Player " + str(turn + 1) + " hat vertikalen threat in spalte " + str(current_col) + "!!")
-                return True
-            else:
-                counter = 0
+    counter = 0
+    for row in range(row_count):
+        if board[row][current_col] == turn + 1:
+            counter += 1
+        elif board[row][current_col] == 0 and counter == 3:
+            print("Player " + str(turn + 1) + " hat vertikalen threat in spalte " + str(current_col) + "!!")
+            num_threats += 1
+            break
+        else:
+            counter = 0
     # check_for_horizontal threat:
-        counter = 0
-        for col in range(column_count):
-            if board[current_row][col] == turn + 1:
-                counter += 1
-            elif counter == 3 and board[current_row][col] == 0:
-                print("Player " + str(turn + 1) + " hat horizontalen threat in Spalte " + str(current_col) + "!!")
-                return True
-            else:
-                counter = 0
+    counter = 0
+    for col in range(column_count):
+        if board[current_row][col] == turn + 1:
+            counter += 1
+        elif counter == 3 and board[current_row][col] == 0:
+            print("Player " + str(turn + 1) + " hat horizontalen threat in Spalte " + str(current_col) + " von links nach rechts!!")
+            num_threats += 1
+            break
+        else:
+            counter = 0
         # loop backwards through same column
-        for col in range(column_count-1, -1, -1):
-            if board[current_row][col] == turn + 1:
-                counter += 1
-            elif counter == 3 and board[current_row][col] == 0:
-                print("Player " + str(turn + 1) + " hat horizontalen threat in Spalte " + str(current_col) + "!!")
-                return True
-            else:
-                counter = 0
+    for col in range(column_count-1, -1, -1):
+        if board[current_row][col] == turn + 1:
+            counter += 1
+        elif counter == 3 and board[current_row][col] == 0:
+            print("Player " + str(turn + 1) + " hat horizontalen threat in Spalte " + str(current_col) + " von rechts nach links!!")
+            num_threats += 1
+            break
+        else:
+            counter = 0
+    if num_threats > 0:
+        return num_threats
+        # board[current_row].split((turn + 1) % 2)
 
 
 game_over = False
@@ -159,8 +166,9 @@ while not game_over:
                     game_over = True
                 if check_game_over(board):
                     game_over = True
-                if has_threat(board, current_row, current_col, turn):
-                    pass
+                num_threats = has_threat(board, current_row, current_col, turn)
+                print("Anzahl threats: " + str(num_threats))
+
                 break
             except ValueError:
                 print("Keine gültige Spaltenzahl!")
@@ -185,8 +193,8 @@ while not game_over:
                     game_over = True
                 if check_game_over(board):
                     game_over = True
-                if has_threat(board, current_row, current_col, turn):
-                    pass
+                num_threats = has_threat(board, current_row, current_col, turn)
+                print("Anzahl threats: " + str(num_threats))
                 break
             except ValueError:
                 print("Keine gültige Spaltenzahl!")
