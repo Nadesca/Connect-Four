@@ -1,0 +1,11 @@
+Title Connect Four
+
+Player->Gui:Mouse_Click
+Gui->Board:is_valid_location
+Board-> Gui:False
+Gui->Board:drop_disc
+Gui->Board:check_for_winning_move
+Board-> Gui:False
+Gui-> Board:check_game_over
+Board-> Gui:False
+
