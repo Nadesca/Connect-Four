@@ -10,40 +10,56 @@ playboard = Rect((50, 50), (700, 600))
 WIDTH = playboard.width + 100
 HEIGHT = playboard.height + 100
 
+# alien = Actor('alien')
+# alien.pos = 100, 56
+# alien.topright = 30, 30
 
-class Disc(object):
 
-    def __init__(self, x, y, image):
+def get_color():
+    return "white"
+
+
+class Board:
+    def __init__(self, rows, cols):
+        # self.create_board = Actor("board")
+        self.rows = rows
+        self.cols = cols
+
+
+board = Board(6, 7)
+DataFrame(np.zeros([6, 7]), index=range(5, -1, -1), dtype=int)
+
+
+class Disc:
+    def __init__(self, x, y, color):
         self.x = x
         self.y = y
-        self.pos = x, y
-        self.image = image
-        self.new_disc = Actor(image)
-        self.new_disc.pos = x, y
+        self.color = color
 
     def draw(self):
-        self.new_disc.draw()
+        screen.draw.filled_circle((self.x, self.y), 30, self.color)
+        # screen.draw.filled_circle((700, 600), 30, 'red')
 
     def update(self):
-        if self.new_disc.y < 600:
-            self.new_disc.y += 100
-            self.new_disc.draw()
+        while self.y < 600:
+            screen.draw.filled_circle((self.x, self.y), 30, "black")
+            self.y = self.y + 100
+            self.draw()
 
 
 def draw():
-    for disc in disc_collection:
-        disc.draw()
+    screen.clear()
+    # draw board
+    screen.draw.filled_rect(playboard, 'blue')
+    for col in range(1, 8):
+        for row in range(1, 7):
+            screen.draw.filled_circle((col * 100, row * 100), 30, 'black')
+    disc = Disc(100, 100, 'yellow')
+    disc.draw()
+    disc.update()
 
-
-def update():
-    for disc in disc_collection:
-        # screen.clear()
-        disc.update()
-
-
-disc_collection = []
-disc_collection.append(Disc(100, 0, "red"))
-disc_collection.append(Disc(200, 0, "yellow"))
+    # screen.draw.filled_circle((700, 600), 30, 'red')
 
 
 pgzrun.go()
+
