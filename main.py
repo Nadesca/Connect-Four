@@ -113,26 +113,27 @@ def get_diag_down(x, y):  # iterate over negatively sloped diagonal downwards fr
     return diag_down
 
 
-def get_start_up(x, y):
-    while x > 0 and y > 0:
-        x -= 1
-        y -= 1
+def get_start_up(current_row, current_col): # get lowest point of positive diagonal going through given point
 
-    return x, y
+     while  current_col > 0 and current_row > 0:
+         current_col -= 1
+         current_row -= 1
+     return current_row, current_col
 
 
-def get_diag_up(x, y):
+def get_diag_up(current_row, current_col): # iterate over positive diagonal from lowest point and write values into array
     diag_up = []
-    start_x, start_y = get_start_up(x, y)
+    start_y, start_x = get_start_up(current_row, current_col)
     print("start x={},start y={}".format(start_x, start_y))
-    while start_x < (len(board[0]) - 1) and start_y < (len(board) - 1):
+    while start_x < len(board[0]) and start_y < len(board):
         # print("x={0}y={1}".format(x, y))
         # print(board[start_x][start_y])
-        diag_up.append(board[start_x][start_y])
+        diag_up.append(board[start_y][start_x])
         start_x += 1
         start_y += 1
         print(start_x, start_y)
     return diag_up
+
 
 
 def drop_piece(board, row, col):
