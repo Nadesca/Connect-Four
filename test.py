@@ -11,7 +11,7 @@ locale.setlocale(locale.LC_ALL, 'de-DE')
 
 
 class Player:
-    def __init__(self, is_first_player, player_name= None, color="default", is_human=True):
+    def __init__(self, is_first_player, player_name=None, color="default", is_human=True):
         self.is_first_player = is_first_player
         self.is_human = is_human
         self.color = color
@@ -21,7 +21,7 @@ class Player:
                 self.color = "yellow"
             else:
                 self.color = "red"
-        if player_name == None:
+        if player_name is None:
             if is_first_player:
                 self._name = "Player One"
             else:
@@ -44,7 +44,7 @@ class Player:
     def name(self, value):
         chars = sum(c.isalpha() for c in str(value))
         print(chars)
-        if self._name == None:
+        if self._name == "Player One" or "Player Two":
             if int(chars) < 3:
                 raise Exception(print("Invalid name!"))
             self._name = value
@@ -113,6 +113,7 @@ if __name__ == "__main__":
     turn = 0
     player1 = Player(True, "Nadia")
     player2 = Player(False)
+    player2.name = "Leo"
 
     while not game_over:
         # Ask for Player 1 Input
